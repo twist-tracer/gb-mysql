@@ -2,11 +2,10 @@
 # долгое время помещались значения в формате 20.10.2017 8:10. Необходимо преобразовать поля к типу DATETIME, сохранив
 # введённые ранее значения.
 
-update ignore vk.user
+update ignore shop.users
 set created_at = if(STR_TO_DATE(created_at, '%d.%m.%Y %h:%i'), STR_TO_DATE(created_at, '%d.%m.%Y %h:%i'), created_at),
     updated_at = if(STR_TO_DATE(updated_at, '%d.%m.%Y %h:%i'), STR_TO_DATE(updated_at, '%d.%m.%Y %h:%i'), updated_at)
 where id > 0;
 
-alter table vk.user
-    change column `updated_at` `updated_at` datetime null default null;
-
+alter table shop.users
+    change column `updated_at` `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;

@@ -2,10 +2,4 @@
 # закончился и выше нуля, если на складе имеются запасы. Необходимо отсортировать записи таким образом, чтобы они
 # выводились в порядке увеличения значения value. Однако нулевые запасы должны выводиться в конце, после всех записей.
 
-CREATE TABLE `storehouses_products` (
-    `id` int unsigned NOT NULL AUTO_INCREMENT,
-    `value` int unsigned NOT NULL DEFAULT '0',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-select * from vk.storehouses_products order by value > 0 desc, value;
+select * from shop.storehouses_products order by value > 0 desc, value;
