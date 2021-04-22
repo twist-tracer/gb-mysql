@@ -125,6 +125,17 @@ CREATE TABLE IF NOT EXISTS `skills_relations` (
     FOREIGN KEY (`vacancy_id`) REFERENCES `vacancies` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
+DELIMITER $$
+CREATE TRIGGER `skills_relations_BEFORE_INSERT` BEFORE INSERT ON `skills_relations` FOR EACH ROW
+BEGIN
+    IF NEW.resume_id IS NOT NULL AND NEW.vacancy_id IS NOT NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Only one of relations can be set';
+    END IF;
+END$$
+DELIMITER ;
+
+# TODO skills_relations_BEFORE_UPDATE
+
 INSERT INTO `skills_relations` (`skill_id`,`resume_id`) VALUES (1,2),(3,3),(4,6),(7,6),(6,8),(3,5),(2,6),(9,4),(11,10),(7,3),(9,9),(8,2),(4,1),(8,8),(1,9),(3,2),(4,2),(8,9),(9,7),(2,4),(8,4),(8,7),(9,2),(7,5),(6,4),(10,8),(1,1),(10,10),(11,7);
 INSERT INTO `skills_relations` (`skill_id`,`vacancy_id`) VALUES (11,26),(3,11),(5,1),(2,14),(5,11),(10,19),(8,25),(2,30),(8,20),(6,28),(9,28),(8,1),(1,22),(6,22),(11,7),(7,3),(7,27),(7,24),(2,3),(3,15),(11,23),(7,25),(6,6),(5,4),(5,21),(2,7),(9,25),(4,30),(8,22),(2,27),(9,13);
 
@@ -151,6 +162,17 @@ CREATE TABLE IF NOT EXISTS `scopes_relations` (
     FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
+DELIMITER $$
+CREATE TRIGGER `scopes_relations_BEFORE_INSERT` BEFORE INSERT ON `scopes_relations` FOR EACH ROW
+BEGIN
+    IF NEW.resume_experience_id IS NOT NULL AND NEW.company_id IS NOT NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Only one of relations can be set';
+    END IF;
+END$$
+DELIMITER ;
+
+# TODO scopes_relations_BEFORE_UPDATE
+
 INSERT INTO `scopes_relations` (`scope_id`,`resume_experience_id`) VALUES (1,24),(1,7),(5,23),(2,5),(2,26),(4,16),(4,3),(1,25),(4,15),(2,3),(5,7),(2,18),(2,14),(2,20),(5,4),(1,3),(2,19),(5,8),(3,25),(4,20),(2,7),(3,18),(2,28),(3,28),(3,26),(1,13),(2,6),(3,6),(2,29),(1,1),(5,20),(5,17),(5,10),(4,23),(1,16),(1,6),(4,22),(3,1),(4,1),(5,28),(3,10),(1,28),(3,21),(3,27),(2,9),(4,8),(5,26),(5,14),(3,20),(5,18),(2,8),(4,25),(1,14),(4,19),(2,21),(1,12),(1,17),(3,4),(1,27),(5,24),(3,11);
 INSERT INTO `scopes_relations` (`scope_id`,`company_id`) VALUES (5,8),(4,14),(2,8),(4,6),(3,1),(1,1),(2,1),(1,10),(4,10),(2,12),(2,6),(1,7),(2,4),(3,11),(2,3),(4,1),(5,4),(3,7),(4,7),(2,7),(2,10),(1,8),(5,2),(2,11),(2,2),(1,4),(5,3),(5,6),(4,15),(1,11),(3,12),(3,3),(3,9),(4,13),(3,5),(3,14),(4,2),(2,9),(3,4),(5,12),(1,3),(5,9),(4,8),(5,5),(4,4),(3,2),(3,8),(1,2),(1,12),(5,11);
 
@@ -163,3 +185,9 @@ from users u
 group by u.id
 order by skills_cnt desc
 limit 5
+
+# TODO one more view
+
+# TODO stored procedure
+
+# TODO stored function
