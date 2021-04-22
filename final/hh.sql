@@ -153,3 +153,13 @@ CREATE TABLE IF NOT EXISTS `scopes_relations` (
 
 INSERT INTO `scopes_relations` (`scope_id`,`resume_experience_id`) VALUES (1,24),(1,7),(5,23),(2,5),(2,26),(4,16),(4,3),(1,25),(4,15),(2,3),(5,7),(2,18),(2,14),(2,20),(5,4),(1,3),(2,19),(5,8),(3,25),(4,20),(2,7),(3,18),(2,28),(3,28),(3,26),(1,13),(2,6),(3,6),(2,29),(1,1),(5,20),(5,17),(5,10),(4,23),(1,16),(1,6),(4,22),(3,1),(4,1),(5,28),(3,10),(1,28),(3,21),(3,27),(2,9),(4,8),(5,26),(5,14),(3,20),(5,18),(2,8),(4,25),(1,14),(4,19),(2,21),(1,12),(1,17),(3,4),(1,27),(5,24),(3,11);
 INSERT INTO `scopes_relations` (`scope_id`,`company_id`) VALUES (5,8),(4,14),(2,8),(4,6),(3,1),(1,1),(2,1),(1,10),(4,10),(2,12),(2,6),(1,7),(2,4),(3,11),(2,3),(4,1),(5,4),(3,7),(4,7),(2,7),(2,10),(1,8),(5,2),(2,11),(2,2),(1,4),(5,3),(5,6),(4,15),(1,11),(3,12),(3,3),(3,9),(4,13),(3,5),(3,14),(4,2),(2,9),(3,4),(5,12),(1,3),(5,9),(4,8),(5,5),(4,4),(3,2),(3,8),(1,2),(1,12),(5,11);
+
+create view `top_skill_users` as
+select u.id, u.firstname, u.lastname, u.middlename, count(distinct s.name) as skills_cnt,  group_concat(distinct s.name) as skills
+from users u
+     join resumes r on u.id=r.user_id
+     join skills_relations sr on sr.resume_id=r.id
+     join skills s on sr.skill_id=s.id
+group by u.id
+order by skills_cnt desc
+limit 5
